@@ -87,22 +87,18 @@ functions:
     handler: hello.handler
     events:
       - http: true
-        x-azure-settings:
-          authLevel: anonymous
+        authLevel: anonymous
       - http: true
-        x-azure-settings:
-          direction: out
+        direction: out
           name: res
   goodbye:
     handler: goodbye.handler
     events:
       - http: true
-        x-azure-settings:
-          authLevel: anonymous
+        authLevel: anonymous
       - http: true
-        x-azure-settings:
-          direction: out
-          name: res
+        direction: out
+        name: res
 ```
 
 ### hello.js and goodbye.js
@@ -131,7 +127,7 @@ Check out the [deployment guide](https://serverless.com/framework/docs/providers
 
 To easily remove your function app from your Azure Functions account, you can use the `remove` command.
 
-Run `serverless remove -v` to trigger the removal process. As in the deploy step we're also running in the `verbose` mode so you can see all details of the remove process.
+Run `serverless remove --verbose` to trigger the removal process. As in the deploy step we're also running in the `verbose` mode so you can see all details of the remove process.
 
 Serverless will start the removal and informs you about it's process on the console. A success message is printed once the whole function app is removed.
 
@@ -154,7 +150,7 @@ To configure version pinning define a `frameworkVersion` property in your server
 ```yml
 # serverless.yml
 
-frameworkVersion: "=1.0.3"
+frameworkVersion: '2.1.0'
 
 …
 ```
@@ -164,7 +160,7 @@ frameworkVersion: "=1.0.3"
 ```yml
 # serverless.yml
 
-frameworkVersion: ">=1.0.0 <2.0.0"
+frameworkVersion: ^2.1.0 # >=2.1.0 && <3.0.0
 
 …
 ```

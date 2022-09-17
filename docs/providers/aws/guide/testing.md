@@ -1,7 +1,5 @@
 <!--
-title: Serverless Framework - AWS Lambda Guide - Testing
-menuText: Testing
-menuOrder: 10
+title: Serverless Framework - Testing
 description: Recommendations and best practices for testing AWS Lambda Functions with the Serverless Framework
 layout: Doc
 -->
@@ -40,7 +38,7 @@ module.exports.saveUser = (event, context, callback) => {
     created_at: Date.now(),
   };
 
-  db.saveUser(user, function(err) {
+  db.saveUser(user, function (err) {
     if (err) {
       callback(err);
     } else {
@@ -73,7 +71,7 @@ class Users {
       created_at: Date.now(),
     };
 
-    this.db.saveUser(user, function(err) {
+    this.db.saveUser(user, function (err) {
       if (err) {
         callback(err);
       } else {

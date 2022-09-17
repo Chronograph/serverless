@@ -1,7 +1,5 @@
 <!--
-title: Serverless Framework - AWS Lambda Guide - Deploying
-menuText: Deploying
-menuOrder: 9
+title: Serverless Framework - Deploying to AWS
 description: How to deploy your AWS Lambda functions and their required infrastructure
 layout: Doc
 -->
@@ -12,7 +10,7 @@ layout: Doc
 
 <!-- DOCS-SITE-LINK:END -->
 
-# AWS - Deploying
+# Deploying to AWS
 
 The Serverless Framework was designed to provision your AWS Lambda Functions, Events and infrastructure Resources safely and quickly. It does this via a couple of methods designed for different types of deployments.
 
@@ -34,13 +32,29 @@ The Serverless Framework translates all syntax in `serverless.yml` to a single A
 
 - An AWS CloudFormation template is created from your `serverless.yml`.
 - If a Stack has not yet been created, then it is created with no resources except for an S3 Bucket, which will store zip files of your Function code.
+- If you're using locally build ECR images, dedicated ECR repository is created for your service. You also will be logged to that repository via `docker login` if needed.
 - The code of your Functions is then packaged into zip files.
+- If you're using locally build ECR images, they are built and uploaded to ECR.
 - Serverless fetches the hashes for all files of the previous deployment (if any) and compares them against the hashes of the local files.
 - Serverless terminates the deployment process if all file hashes are the same.
 - Zip files of your Functions' code are uploaded to your Code S3 Bucket.
 - Any IAM Roles, Functions, Events and Resources are added to the AWS CloudFormation template.
 - The CloudFormation Stack is updated with the new CloudFormation template.
 - Each deployment publishes a new version for each function in your service.
+
+### Deployment method
+
+Since Serverless Framework v3, deployments are done using [CloudFormation change sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html). It is possible to use [CloudFormation direct deployments](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-direct.html) instead.
+
+Direct deployments **are faster** and have no downsides (unless you specifically use the generated change sets). They will become the default in Serverless Framework 4.
+
+You are encouraged to enable direct deployments via the `deploymentMethod` option:
+
+```
+provider:
+  name: aws
+  deploymentMethod: direct
+```
 
 ### Tips
 
@@ -77,6 +91,11 @@ The Serverless Framework translates all syntax in `serverless.yml` to a single A
   The `deploymentPrefix` config which is nested under `provider` lets you set the prefix under which the deployment artifacts will be stored. If not specified, defaults to `serverless`.
 
 - You can make uploading to S3 faster by adding `--aws-s3-accelerate`
+
+- You can disable creation of default S3 bucket policy by setting `skipPolicySetup` under `deploymentBucket` config. It only applies to deployment bucket that is automatically created
+  by the Serverless Framework.
+
+- You can enable versioning for the deployment bucket by setting `versioning` under `deploymentBucket` config to `true`.
 
 Check out the [deploy command docs](../cli-reference/deploy.md) for all details and options.
 
